@@ -1,0 +1,21 @@
+6. Răspunsuri la întrebări suplimentare:
+
+A. Utilizați pentru texturare imagini cu transparență și fără. Ce observaţi?
+Dacă utilizăm o imagine cu transparență (ex: ".png" cu canal Alpha) fără a activa "GL.Blend", zonele transparente vor fi randate ca opace (de obicei negre sau albe), obturând fundalul.
+Pentru a vedea transparența corect, trebuie activat "GL.Enable(EnableCap.Blend)" și setată funcția de amestecare, de exemplu: "GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha)". Astfel, culoarea pixelului este calculată combinând textura cu culoarea deja existentă pe ecran.
+
+B. Ce formate de imagine pot fi aplicate în procesul de texturare în OpenGL?
+Biblioteca "System.Drawing" (folosită de OpenTK pentru încărcare) suportă majoritatea formatelor standard:
+BMP, JPG: Comune, dar de obicei nu conțin canal Alpha (transparență).
+PNG, GIF, TIFF: Suportă compresie și transparență (canal Alpha), fiind ideale pentru texturi cu decupaje sau elemente semi-transparente.
+
+C. Specificați ce se întâmplă atunci când se modifică culoarea (prin manipularea canalelor RGB) obiectului texturat.
+În OpenGL, culoarea setată prin "GL.Color3" interacționează cu textura (de obicei prin înmulțire/modulare):
+Culoarea Albă (1,1,1): Textura este afișată cu culorile ei originale.
+Culoarea Roșie (1,0,0): Textura va apărea "filtrată" roșu (doar componenta roșie a pixelilor din imagine este păstrată).
+Culoarea Neagră (0,0,0): Obiectul devine complet negru, indiferent de textură.
+Practic, "GL.Color" acționează ca un filtru de culoare peste imagine.
+
+D. Ce deosebiri există între scena ce utilizează obiecte texturate în modul iluminare activat, respectiv dezactivat?
+Iluminare Dezactivată: Textura este randată la luminozitate maximă ("fullbright"). Obiectul arată plat, 2D, deoarece nu există umbre sau variații de lumină în funcție de unghiul fețelor.
+Iluminare Activată: Culoarea finală a fiecărui pixel este rezultatul combinației dintre culoarea texturii și calculul de lumină (ambientală + difuză + speculară). Obiectul capătă volum, fețele orientate spre lumină sunt mai clare, iar cele opuse sunt mai întunecate.
